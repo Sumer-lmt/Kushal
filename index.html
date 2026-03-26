@@ -31,8 +31,10 @@
     .nav-item:hover{color:#fff;background:rgba(255,255,255,.05)}
     .nav-item.active{color:#fff;border-left-color:#6c63ff;background:rgba(108,99,255,.12)}
     .nav-icon{font-size:1.1rem;width:20px;text-align:center}
-    .dark-toggle{margin-top:auto;padding:16px 24px;display:flex;align-items:center;gap:10px;cursor:pointer;color:#9999bb;font-size:.85rem;font-weight:500;transition:color .2s;border-top:1px solid rgba(255,255,255,.06)}
+    .dark-toggle{padding:16px 24px;display:flex;align-items:center;gap:10px;cursor:pointer;color:#9999bb;font-size:.85rem;font-weight:500;transition:color .2s;border-top:1px solid rgba(255,255,255,.06)}
     .dark-toggle:hover{color:#fff}
+    .reset-btn{margin-top:auto;padding:14px 24px;display:flex;align-items:center;gap:10px;cursor:pointer;color:#ff6b6b;font-size:.85rem;font-weight:500;transition:color .2s;border-top:1px solid rgba(255,255,255,.06)}
+    .reset-btn:hover{color:#ff4444}
     .toggle-track{width:36px;height:20px;background:#333355;border-radius:99px;position:relative;transition:background .3s;flex-shrink:0}
     body.dark .toggle-track{background:#6c63ff}
     .toggle-thumb{width:14px;height:14px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:transform .3s}
@@ -198,6 +200,9 @@
   <div class="dark-toggle" onclick="toggleDark()">
     <div class="toggle-track"><div class="toggle-thumb"></div></div>
     <span id="dark-label">Dark Mode</span>
+  </div>
+  <div class="reset-btn" onclick="resetAllData()">
+    <span>🗑️</span> Reset All Data
   </div>
 </aside>
 
@@ -949,6 +954,13 @@ function toggleDark() {
   localStorage.setItem('pf_dark', dark ? '1' : '0');
   document.getElementById('dark-label').textContent = dark ? 'Light Mode' : 'Dark Mode';
   if (document.querySelector('.page.active').id === 'page-charts') renderCharts();
+}
+
+function resetAllData() {
+  if (!confirm('Reset ALL data? This will delete all transactions and budget settings. This cannot be undone.')) return;
+  localStorage.removeItem('pf_transactions');
+  localStorage.removeItem('pf_budget');
+  showPage('dashboard');
 }
 
 // ════════════════════════════════════════
