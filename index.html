@@ -159,6 +159,18 @@
     .chart-wrap{position:relative;height:260px}
     .chart-no-data{display:flex;align-items:center;justify-content:center;height:260px;color:var(--text-faint);font-size:.9rem;flex-direction:column;gap:8px}
 
+    /* ── Category Filter Panel ── */
+    .cat-filter-panel{background:var(--surface);border-radius:16px;padding:18px 22px;box-shadow:var(--shadow);margin-bottom:20px;transition:background .3s}
+    .cat-filter-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+    .cat-filter-title{font-size:.9rem;font-weight:700;color:var(--text)}
+    .cat-filter-actions{display:flex;gap:8px}
+    .cat-filter-actions button{font-size:.75rem;padding:4px 10px;border-radius:99px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;transition:all .2s}
+    .cat-filter-actions button:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+    .cat-chips{display:flex;flex-wrap:wrap;gap:8px}
+    .cat-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:99px;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s;user-select:none}
+    .cat-chip.active{color:#fff;border-color:transparent}
+    .cat-chip .chip-check{font-size:.7rem;opacity:.8}
+
     /* ── Insights ── */
     .insights-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:0}
     .insight-card{background:var(--surface);border-radius:16px;padding:24px;box-shadow:var(--shadow);transition:background .3s;margin-bottom:24px}
@@ -303,6 +315,19 @@
   <!-- ══ CHARTS ══ -->
   <div id="page-charts" class="page">
     <div class="page-header"><h1>Charts</h1><p>Visual breakdown of your finances</p></div>
+
+    <!-- Category Filter -->
+    <div class="cat-filter-panel">
+      <div class="cat-filter-header">
+        <span class="cat-filter-title">🔽 Filter Categories</span>
+        <div class="cat-filter-actions">
+          <button onclick="selectAllCats(true)">Select All</button>
+          <button onclick="selectAllCats(false)">Deselect All</button>
+        </div>
+      </div>
+      <div class="cat-chips" id="cat-chips"></div>
+    </div>
+
     <div class="charts-grid">
       <div class="chart-card">
         <div class="chart-card-title">Expenses by Category</div>
@@ -804,9 +829,50 @@ function renderBudget() {
 const charts = {};
 function destroyChart(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
 
+let hiddenCats = new Set();
+
+function renderCatFilters() {
+  const txs = getTransactions();
+  const allCats = [...new Set(txs.filter(t=>t.type==='expense').map(t=>t.category))].sort();
+  const container = document.getElementById('cat-chips');
+  if (!container) return;
+  // Remove chips for categories that no longer exist
+  hiddenCats = new Set([...hiddenCats].filter(c => allCats.includes(c)));
+  container.innerHTML = allCats.map((cat, i) => {
+    const active = !hiddenCats.has(cat);
+    const color = COLORS[i % COLORS.length];
+    return `<div class="cat-chip ${active?'active':''}" id="chip-${CSS.escape(cat)}"
+      style="${active ? `background:${color};border-color:${color}` : ''}"
+      onclick="toggleCat('${cat.replace(/'/g,"\\'")}')">
+      <span class="chip-check">${active ? '✓' : '○'}</span>
+      ${ICONS[cat]||'📌'} ${cat}
+    </div>`;
+  }).join('') || '<span style="color:var(--text-faint);font-size:.85rem">Import transactions to see categories</span>';
+}
+
+function toggleCat(cat) {
+  if (hiddenCats.has(cat)) hiddenCats.delete(cat);
+  else hiddenCats.add(cat);
+  renderCatFilters();
+  const txs = getTransactions();
+  const filtered = txs.filter(t => t.type !== 'expense' || !hiddenCats.has(t.category));
+  renderPieChart(filtered); renderBarChart(filtered); renderLineChart(filtered);
+}
+
+function selectAllCats(selectAll) {
+  const txs = getTransactions();
+  const allCats = [...new Set(txs.filter(t=>t.type==='expense').map(t=>t.category))];
+  hiddenCats = selectAll ? new Set() : new Set(allCats);
+  renderCatFilters();
+  const filtered = txs.filter(t => t.type !== 'expense' || !hiddenCats.has(t.category));
+  renderPieChart(filtered); renderBarChart(filtered); renderLineChart(filtered);
+}
+
 function renderCharts() {
   const txs = getTransactions();
-  renderPieChart(txs); renderBarChart(txs); renderLineChart(txs);
+  renderCatFilters();
+  const filtered = txs.filter(t => t.type !== 'expense' || !hiddenCats.has(t.category));
+  renderPieChart(filtered); renderBarChart(filtered); renderLineChart(filtered);
 }
 
 function renderPieChart(txs) {
