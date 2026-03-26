@@ -197,6 +197,54 @@
     .stat-row:last-child{border-bottom:none}
     .stat-label{font-size:.88rem;color:var(--text-muted)}
     .stat-value{font-size:.95rem;font-weight:700;color:var(--text)}
+
+    /* ── Health Score ── */
+    .health-score-wrap{display:flex;align-items:center;gap:24px;padding:4px 0}
+    .score-ring{width:114px;height:114px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .score-ring-inner{width:84px;height:84px;border-radius:50%;background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .score-number{font-size:1.9rem;font-weight:800;line-height:1}
+    .score-grade{font-size:.75rem;font-weight:700;letter-spacing:1px;margin-top:2px}
+    .score-details{flex:1}
+    .score-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:9px;font-size:.78rem}
+    .score-bar-label{width:120px;color:var(--text-muted);flex-shrink:0}
+    .score-bar-track{flex:1;height:6px;border-radius:99px;background:var(--border);overflow:hidden}
+    .score-bar-fill{height:100%;border-radius:99px}
+    .score-bar-pts{width:42px;text-align:right;color:var(--text);font-weight:600}
+
+    /* ── 50/30/20 ── */
+    .rule-section{margin-bottom:14px}
+    .rule-section:last-child{margin-bottom:0}
+    .rule-section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+    .rule-section-name{font-size:.85rem;font-weight:700;color:var(--text)}
+    .rule-track{height:10px;border-radius:99px;background:var(--border);overflow:hidden;margin-bottom:4px}
+    .rule-fill{height:100%;border-radius:99px;transition:width .6s}
+    .rule-meta{display:flex;justify-content:space-between;font-size:.72rem;color:var(--text-faint)}
+
+    /* ── Month-on-Month ── */
+    .mom-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px}
+    .mom-item{background:var(--bg);border-radius:12px;padding:12px 14px}
+    .mom-item-cat{font-size:.76rem;font-weight:700;color:var(--text-muted);margin-bottom:5px}
+    .mom-item-amt{font-size:.95rem;font-weight:700;color:var(--text)}
+    .mom-item-change{font-size:.73rem;font-weight:600;margin-top:3px}
+    .change-up{color:#ef4444}.change-down{color:#22c55e}.change-new{color:#f59e0b}
+
+    /* ── Money Tips ── */
+    .tips-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media(max-width:700px){.tips-grid{grid-template-columns:1fr}}
+    .tip-card{border-radius:14px;padding:16px 18px;border-left:4px solid transparent}
+    .tip-card.tip-action{background:rgba(108,99,255,.08);border-color:#6c63ff}
+    .tip-card.tip-warning{background:rgba(245,158,11,.08);border-color:#f59e0b}
+    .tip-card.tip-success{background:rgba(34,197,94,.08);border-color:#22c55e}
+    .tip-card.tip-info{background:rgba(59,130,246,.08);border-color:#3b82f6}
+    .tip-title{font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:5px}
+    .tip-body{font-size:.8rem;color:var(--text-muted);line-height:1.6}
+
+    /* ── Forecast ── */
+    .forecast-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:12px}
+    .forecast-item{text-align:center;background:var(--bg);border-radius:14px;padding:18px 12px}
+    .forecast-value{font-size:1.25rem;font-weight:800;margin-bottom:5px}
+    .forecast-label{font-size:.76rem;color:var(--text-faint);line-height:1.4}
+    .forecast-note{text-align:center;font-size:.82rem;color:var(--text-muted);padding-top:4px}
   </style>
 </head>
 <body>
@@ -392,10 +440,40 @@
           </table>
         </div>
       </div>
+      <!-- Health Score + 50/30/20 -->
+      <div class="insight-card">
+        <div class="insight-card-title">🏅 Financial Health Score</div>
+        <div id="insight-health"><div class="empty-state" style="padding:20px"><div class="empty-icon">📂</div>Import transactions to see your score</div></div>
+      </div>
+      <div class="insight-card">
+        <div class="insight-card-title">🎯 50/30/20 Rule Analysis</div>
+        <div id="insight-5030"><div class="empty-state" style="padding:20px"><div class="empty-icon">📂</div>Import transactions to see breakdown</div></div>
+      </div>
+
+      <!-- Forecast -->
+      <div class="insight-card full">
+        <div class="insight-card-title">🔮 This Month's Spending Forecast</div>
+        <div id="insight-forecast"><div class="empty-state" style="padding:20px"><div class="empty-icon">📂</div>Import transactions to see forecast</div></div>
+      </div>
+
+      <!-- Month-on-Month -->
+      <div class="insight-card full">
+        <div class="insight-card-title">📈 Month-on-Month Changes</div>
+        <div id="insight-mom"><div class="empty-state" style="padding:20px"><div class="empty-icon">📂</div>Import transactions to compare months</div></div>
+      </div>
+
+      <!-- Smart Alerts -->
       <div class="insight-card full">
         <div class="insight-card-title">⚠️ Smart Alerts</div>
         <div id="insight-alerts"><div class="empty-state" style="padding:20px"><div class="empty-icon">📂</div>Import transactions to see alerts</div></div>
       </div>
+
+      <!-- Personalised Tips -->
+      <div class="insight-card full">
+        <div class="insight-card-title">💡 Personalised Money Tips</div>
+        <div id="insight-tips"><div class="empty-state" style="padding:20px"><div class="empty-icon">📂</div>Import transactions to get tips</div></div>
+      </div>
+
       <div class="insight-card full">
         <div class="insight-card-title">💸 Biggest Transactions</div>
         <div id="insight-biggest"><div class="empty-state" style="padding:20px"><div class="empty-icon">📂</div>Import transactions to see biggest expenses</div></div>
@@ -1080,6 +1158,18 @@ function renderInsights() {
     </tr>`;
   }).join('');
 
+  // ── Health Score ──
+  renderHealthScore(expenses, totalInc, totalExp, bycat, savRate, numMon);
+
+  // ── 50/30/20 ──
+  render5030(expenses, totalInc, bycat);
+
+  // ── Forecast ──
+  renderForecast(txs, avgExp);
+
+  // ── Month-on-Month ──
+  renderMoM(txs, mKeys);
+
   // ── Smart Alerts ──
   const alerts = [];
   const food    = bycat['Food & Dining']    || 0;
@@ -1102,6 +1192,9 @@ function renderInsights() {
     ? alerts.map(a => `<div class="alert-item ${a.type}"><div class="alert-icon">${a.icon}</div><div class="alert-text"><strong>${a.title}</strong>${a.msg}</div></div>`).join('')
     : `<div style="text-align:center;color:var(--text-faint);padding:20px">No alerts — finances look healthy! 🎉</div>`;
 
+  // ── Personalised Tips ──
+  renderMoneyTips(expenses, totalInc, totalExp, bycat, savRate, numMon);
+
   // ── Biggest Transactions ──
   const biggest = [...txs].sort((a,b) => b.amount - a.amount).slice(0, 7);
   document.getElementById('insight-biggest').innerHTML = biggest.map((t,i) => `
@@ -1114,6 +1207,244 @@ function renderInsights() {
       </div>
       <div class="tx-amount ${t.type}" style="font-size:.9rem">${t.type==='income'?'+':'-'}${fmt(t.amount)}</div>
     </div>`).join('');
+}
+
+// ── Financial Health Score ──────────────
+function renderHealthScore(expenses, totalInc, totalExp, bycat, savRate, numMon) {
+  const el = document.getElementById('insight-health'); if (!el) return;
+  let score = 0;
+  const items = [];
+
+  // Savings Rate (0-30 pts)
+  const savPts = savRate >= 20 ? 30 : savRate >= 10 ? 20 : savRate > 0 ? 10 : 0;
+  score += savPts;
+  items.push({label:'Savings Rate', pts:savPts, max:30, color:'#6c63ff'});
+
+  // Investments (0-25 pts)
+  const invAmt = bycat['Investments']||0;
+  const invPct = totalInc > 0 ? (invAmt/totalInc)*100 : 0;
+  const invPts = invPct >= 10 ? 25 : invPct >= 5 ? 18 : invPct > 0 ? 10 : 0;
+  score += invPts;
+  items.push({label:'Investing', pts:invPts, max:25, color:'#22c55e'});
+
+  // Food control (0-15 pts)
+  const foodPct = totalExp > 0 ? ((bycat['Food & Dining']||0)/totalExp)*100 : 0;
+  const foodPts = foodPct <= 15 ? 15 : foodPct <= 25 ? 10 : foodPct <= 35 ? 5 : 0;
+  score += foodPts;
+  items.push({label:'Food Control', pts:foodPts, max:15, color:'#f59e0b'});
+
+  // Digital payments (0-15 pts)
+  const cashPct = totalExp > 0 ? ((bycat['Cash Withdrawal']||0)/totalExp)*100 : 0;
+  const cashPts = cashPct === 0 ? 15 : cashPct < 5 ? 11 : cashPct < 15 ? 6 : 0;
+  score += cashPts;
+  items.push({label:'Digital Payments', pts:cashPts, max:15, color:'#3b82f6'});
+
+  // Expense diversity (0-15 pts)
+  const numCats = Object.keys(bycat).length;
+  const divPts = numCats >= 6 ? 15 : numCats >= 4 ? 10 : 5;
+  score += divPts;
+  items.push({label:'Expense Tracking', pts:divPts, max:15, color:'#ec4899'});
+
+  score = Math.min(100, score);
+  const grade = score >= 80 ? {l:'A',c:'#22c55e'} : score >= 65 ? {l:'B',c:'#84cc16'} : score >= 50 ? {l:'C',c:'#f59e0b'} : score >= 35 ? {l:'D',c:'#f97316'} : {l:'F',c:'#ef4444'};
+  const ringDeg = Math.round((score/100)*360);
+
+  el.innerHTML = `
+    <div class="health-score-wrap">
+      <div class="score-ring" style="background:conic-gradient(${grade.c} ${ringDeg}deg, var(--border) 0deg)">
+        <div class="score-ring-inner">
+          <div class="score-number" style="color:${grade.c}">${score}</div>
+          <div class="score-grade" style="color:${grade.c}">Grade ${grade.l}</div>
+        </div>
+      </div>
+      <div class="score-details">
+        ${items.map(it=>`
+        <div class="score-bar-row">
+          <div class="score-bar-label">${it.label}</div>
+          <div class="score-bar-track"><div class="score-bar-fill" style="width:${Math.round((it.pts/it.max)*100)}%;background:${it.color}"></div></div>
+          <div class="score-bar-pts">${it.pts}/${it.max}</div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+// ── 50/30/20 Rule ───────────────────────
+function render5030(expenses, totalInc, bycat) {
+  const el = document.getElementById('insight-5030'); if (!el) return;
+  const needsCats = ['Groceries','Electricity','Telecom','Insurance & EMI','Rent','Transport','Healthcare','Education','Other'];
+  const wantsCats = ['Food & Dining','Shopping','Entertainment','Subscriptions'];
+  let needsAmt = 0, wantsAmt = 0;
+  expenses.forEach(t => {
+    if (needsCats.includes(t.category)) needsAmt += t.amount;
+    else if (wantsCats.includes(t.category)) wantsAmt += t.amount;
+  });
+  const invAmt = bycat['Investments']||0;
+  const base = totalInc || 1;
+  const needsPct = Math.round((needsAmt/base)*100);
+  const wantsPct = Math.round((wantsAmt/base)*100);
+  const savPct   = Math.round((invAmt/base)*100);
+
+  const row = (icon, label, actual, target, color, desc) => {
+    const ok = actual <= target;
+    return `<div class="rule-section">
+      <div class="rule-section-header">
+        <span class="rule-section-name">${icon} ${label}</span>
+        <span style="font-size:.83rem;font-weight:700;color:${ok?'#22c55e':'#ef4444'}">${actual}% <span style="font-weight:400;color:var(--text-faint);font-size:.72rem">/ ${target}% target</span></span>
+      </div>
+      <div class="rule-track"><div class="rule-fill" style="width:${Math.min(100,actual)}%;background:${color}"></div></div>
+      <div class="rule-meta"><span>${desc}</span><span style="color:${ok?'#22c55e':'#ef4444'}">${ok?'✓ On track':'↑ Over budget'}</span></div>
+    </div>`;
+  };
+
+  el.innerHTML =
+    row('🏠','Needs', needsPct, 50, '#3b82f6', 'Rent, bills, groceries, transport') +
+    row('🎉','Wants', wantsPct, 30, '#f59e0b', 'Dining, shopping, entertainment') +
+    row('💰','Savings', savPct, 20, '#22c55e', 'Investments, SIP, emergency fund') +
+    `<div style="font-size:.73rem;color:var(--text-faint);margin-top:10px;text-align:center">Based on total income of ${fmt(totalInc)}</div>`;
+}
+
+// ── Month-on-Month Changes ──────────────
+function renderMoM(txs, mKeys) {
+  const el = document.getElementById('insight-mom'); if (!el) return;
+  if (mKeys.length < 2) {
+    el.innerHTML = '<div style="color:var(--text-faint);text-align:center;padding:16px;font-size:.85rem">Need at least 2 months of data to compare</div>';
+    return;
+  }
+  const prevM = mKeys[mKeys.length-2], currM = mKeys[mKeys.length-1];
+  const prevByCat = {}, currByCat = {};
+  txs.filter(t=>t.type==='expense'&&t.date.startsWith(prevM)).forEach(t=>{ prevByCat[t.category]=(prevByCat[t.category]||0)+t.amount; });
+  txs.filter(t=>t.type==='expense'&&t.date.startsWith(currM)).forEach(t=>{ currByCat[t.category]=(currByCat[t.category]||0)+t.amount; });
+  const allCats = [...new Set([...Object.keys(prevByCat),...Object.keys(currByCat)])];
+  const fmtM = m => new Date(m+'-01').toLocaleDateString('en-US',{month:'short',year:'2-digit'});
+  el.innerHTML = `
+    <div style="font-size:.8rem;color:var(--text-faint);margin-bottom:14px">Comparing <strong>${fmtM(prevM)}</strong> → <strong>${fmtM(currM)}</strong></div>
+    <div class="mom-grid">
+      ${allCats.map(cat => {
+        const prev=prevByCat[cat]||0, curr=currByCat[cat]||0;
+        const diff=curr-prev, pct=prev>0?Math.round((diff/prev)*100):null;
+        return `<div class="mom-item">
+          <div class="mom-item-cat">${ICONS[cat]||'📌'} ${cat}</div>
+          <div class="mom-item-amt">${fmt(curr)}</div>
+          ${pct!==null
+            ? `<div class="mom-item-change ${diff>0?'change-up':'change-down'}">${diff>0?'▲':'▼'} ${Math.abs(pct)}% vs last month</div>`
+            : `<div class="mom-item-change change-new">🆕 New this month</div>`}
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+// ── Spending Forecast ───────────────────
+function renderForecast(txs, avgExp) {
+  const el = document.getElementById('insight-forecast'); if (!el) return;
+  const today = new Date();
+  const currM = today.toISOString().slice(0,7);
+  const daysInMonth = new Date(today.getFullYear(), today.getMonth()+1, 0).getDate();
+  const dayOfMonth  = today.getDate();
+  const daysLeft    = daysInMonth - dayOfMonth;
+  const currTxs = txs.filter(t=>t.date.startsWith(currM));
+  const currSpent = currTxs.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amount,0);
+  const currInc   = currTxs.filter(t=>t.type==='income').reduce((s,t)=>s+t.amount,0);
+  if (!currSpent && !currInc) {
+    el.innerHTML='<div style="color:var(--text-faint);text-align:center;padding:16px;font-size:.85rem">No transactions found for the current month yet</div>';
+    return;
+  }
+  const dailyRate = dayOfMonth > 0 ? currSpent/dayOfMonth : 0;
+  const projected = Math.round(dailyRate*daysInMonth);
+  const vsAvg     = avgExp > 0 ? Math.round(((projected-avgExp)/avgExp)*100) : 0;
+  const remaining = currInc > 0 ? currInc - currSpent : null;
+  el.innerHTML = `
+    <div class="forecast-grid">
+      <div class="forecast-item">
+        <div class="forecast-value" style="color:#6c63ff">${fmt(currSpent)}</div>
+        <div class="forecast-label">Spent so far<br>(${dayOfMonth} of ${daysInMonth} days)</div>
+      </div>
+      <div class="forecast-item">
+        <div class="forecast-value" style="color:${projected>avgExp&&avgExp>0?'#ef4444':'#22c55e'}">${fmt(projected)}</div>
+        <div class="forecast-label">Projected month-end${vsAvg!==0?`<br><span style="font-size:.7rem">${vsAvg>0?'↑':'↓'} ${Math.abs(vsAvg)}% vs avg</span>`:''}</div>
+      </div>
+      <div class="forecast-item">
+        <div class="forecast-value" style="color:#f59e0b">${fmt(Math.round(dailyRate))}</div>
+        <div class="forecast-label">Daily burn rate<br>${daysLeft} days left this month</div>
+      </div>
+    </div>
+    ${remaining!==null?`<div class="forecast-note">Balance after income &amp; expenses so far: <strong style="color:${remaining>=0?'#22c55e':'#ef4444'}">${remaining>=0?'+':''}${fmt(remaining)}</strong></div>`:''}`;
+}
+
+// ── Personalised Money Tips ─────────────
+function renderMoneyTips(expenses, totalInc, totalExp, bycat, savRate, numMon) {
+  const el = document.getElementById('insight-tips'); if (!el) return;
+  const tips = [];
+  const invAmt   = bycat['Investments']||0;
+  const foodAmt  = bycat['Food & Dining']||0;
+  const rentAmt  = bycat['Rent']||0;
+  const subAmt   = bycat['Subscriptions']||0;
+  const shopAmt  = bycat['Shopping']||0;
+  const cashAmt  = bycat['Cash Withdrawal']||0;
+  const emiAmt   = bycat['Insurance & EMI']||0;
+
+  // Investment habit
+  if (invAmt === 0 && totalInc > 0) {
+    const sip = Math.max(500, Math.round(totalInc*0.1/numMon/500)*500);
+    tips.push({type:'action', icon:'📈', title:'Start a SIP today', body:`No investments tracked. A ₹${sip.toLocaleString('en-IN')}/month index fund SIP can grow to ₹${Math.round(sip*12*10*1.4/1000)}K+ in 10 years at 12% return. Time in the market beats timing the market.`});
+  } else if (invAmt > 0) {
+    const pct = totalInc > 0 ? Math.round((invAmt/totalInc)*100) : 0;
+    tips.push({type:'success', icon:'🎉', title:`Investing ${pct}% of income — great!`, body:`Keep it up! Use the Step-Up SIP strategy — increase your SIP by 10% every April when salaries rise. Even small annual increments make a massive long-term difference.`});
+  }
+
+  // Emergency fund
+  if (totalExp > 0) {
+    const avgMonthlyExp = totalExp/numMon;
+    tips.push({type:'info', icon:'🛡️', title:'Build your Emergency Fund', body:`Your 6-month emergency fund target is ${fmt(Math.round(avgMonthlyExp*6))}. Keep it in a liquid mutual fund or high-yield savings account — not a regular account you'll dip into.`});
+  }
+
+  // Food
+  if (foodAmt/numMon > 3000) {
+    const save = Math.round((foodAmt/numMon)*0.4*12);
+    tips.push({type:'warning', icon:'🍔', title:'Food delivery is a big leak', body:`Spending ~${fmt(Math.round(foodAmt/numMon))}/month on food delivery. Cutting 40% by cooking 3 extra meals/week saves ${fmt(save)}/year — enough for a short trip or 1 year of SIP.`});
+  }
+
+  // Rent ratio
+  if (rentAmt > 0 && totalInc > 0) {
+    const pct = Math.round((rentAmt/totalInc)*100);
+    if (pct > 40) tips.push({type:'warning', icon:'🏠', title:`Rent is ${pct}% of income — too high`, body:`Recommended cap is 30%. Consider a flatmate to split costs, negotiating at renewal time, or exploring nearby areas with lower rents.`});
+    else tips.push({type:'success', icon:'🏠', title:`Healthy rent ratio (${pct}%)`, body:`Rent under 30% of income is excellent. Channel this freed-up cash into your emergency fund first, then investments.`});
+  }
+
+  // Subscriptions
+  if (subAmt/numMon > 500) {
+    tips.push({type:'warning', icon:'📲', title:'Do a subscription audit', body:`Spending ${fmt(Math.round(subAmt/numMon))}/month = ${fmt(Math.round(subAmt/numMon*12))}/year on subscriptions. List every active sub right now and cancel anything you haven't opened in 30 days.`});
+  }
+
+  // Impulse shopping
+  if (shopAmt/numMon > 5000) {
+    tips.push({type:'warning', icon:'🛍️', title:'Try the 48-hour rule for shopping', body:`~${fmt(Math.round(shopAmt/numMon))}/month on shopping. Before every non-essential purchase, wait 48 hours. Most impulse urges disappear. This one habit cuts shopping by 30-40%.`});
+  }
+
+  // Cash
+  if (cashAmt > 5000) {
+    tips.push({type:'action', icon:'💵', title:'Track your cash spending', body:`${fmt(cashAmt)} in cash withdrawals is invisible money. Every time you take cash out, log where it went the same day. Awareness alone reduces cash spend by 20%.`});
+  }
+
+  // EMI warning
+  if (emiAmt > 0 && totalInc > 0) {
+    const emiPct = Math.round((emiAmt/totalInc)*100);
+    if (emiPct > 40) tips.push({type:'danger', icon:'🛡️', title:`EMIs are ${emiPct}% of income — risky`, body:`High debt obligations leave little room for emergencies. Prioritise paying off highest-interest debt first (avalanche method). Avoid taking new loans until EMI ratio drops below 30%.`});
+  }
+
+  // Savings rate
+  if (savRate >= 20) {
+    tips.push({type:'success', icon:'🏆', title:`Saving ${Math.round(savRate)}% — beating the rule!`, body:`Excellent discipline. Now focus on asset allocation: 60% equity (index funds), 30% debt (PPF/FD), 10% liquid funds. Diversification protects your wealth.`});
+  } else if (savRate > 0 && savRate < 10) {
+    tips.push({type:'action', icon:'💡', title:'Automate savings on payday', body:`Set up an auto-transfer the day salary arrives — move 10% to a separate account before you can spend it. What you don't see, you don't miss. Gradually raise it by 1% each month.`});
+  }
+
+  if (tips.length === 0) tips.push({type:'success', icon:'🎉', title:'Finances look healthy!', body:'Keep tracking every transaction and review monthly. Consistency is the biggest wealth-building tool you have.'});
+
+  el.innerHTML = `<div class="tips-grid">${tips.slice(0,8).map(t=>`
+    <div class="tip-card tip-${t.type}">
+      <div class="tip-title">${t.icon} ${t.title}</div>
+      <div class="tip-body">${t.body}</div>
+    </div>`).join('')}</div>`;
 }
 
 // ════════════════════════════════════════
